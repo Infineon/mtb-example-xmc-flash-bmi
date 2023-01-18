@@ -394,7 +394,7 @@ static void bmi_status_cmd(uint32_t argc, char **argv)
  * Function Name: flash_ucb_program_count
  ********************************************************************************
  * Summary:
- * This function programs the UCB program count into the flash sector 11
+ * This function programs the UCB program count into the flash sector 8
  *
  * Parameters:
  *  uint32_t count - UCB programming count
@@ -408,18 +408,18 @@ static void flash_ucb_program_count(uint32_t count)
     /* Data array */
     uint32_t data[XMC_FLASH_WORDS_PER_PAGE] = {count, 0};
 
-    /* Erase Flash Sector 11 */
-    XMC_FLASH_EraseSector(XMC_FLASH_SECTOR_11);
+    /* Erase Flash Sector 8 */
+    XMC_FLASH_EraseSector(XMC_FLASH_SECTOR_8);
 
-    /* Program Flash Sector 11 */
-    XMC_FLASH_ProgramPage(XMC_FLASH_SECTOR_11, data);
+    /* Program Flash Sector 8 */
+    XMC_FLASH_ProgramPage(XMC_FLASH_SECTOR_8, data);
 }
 
 /*******************************************************************************
  * Function Name: flash_get_ucb_program_count
  ********************************************************************************
  * Summary:
- * This function retrieves the UCB program count stored in flash sector 11
+ * This function retrieves the UCB program count stored in flash sector 8
  *
  * Parameters:
  *  none
@@ -430,8 +430,8 @@ static void flash_ucb_program_count(uint32_t count)
  *******************************************************************************/
 static uint32_t flash_get_ucb_program_count()
 {
-    /* Point to XMC_FLASH_SECTOR_11 flash address */
-    const uint32_t *address = XMC_FLASH_SECTOR_11;
+    /* Point to XMC_FLASH_SECTOR_8 flash address */
+    const uint32_t *address = XMC_FLASH_SECTOR_8;
 
     return *address;
 }
@@ -500,8 +500,8 @@ int main(void)
     /* Initialize the UCB Program counter */
     ucb_program_count = flash_get_ucb_program_count();
 
-    /* Reset the counter and erase flash sector if invalid count
-     * value found in flash for counter
+    /* Reset the counter and erase flash sector if invalid counter
+     * value found in flash
      */
     if(ucb_program_count > UCB_PROGRAM_MAX_LIMIT)
     {

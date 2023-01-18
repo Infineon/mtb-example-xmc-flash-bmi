@@ -28,6 +28,8 @@
 # Basic Configuration
 ################################################################################
 
+MTB_TYPE=COMBINED
+
 # Target board/hardware (BSP).
 # To change the target, it is recommended to use the Library manager
 # ('make modlibs' from command line), which will also update Eclipse IDE launch
@@ -79,10 +81,10 @@ VERBOSE=
 # ... then code in directories named COMPONENT_foo and COMPONENT_bar will be
 # added to the build
 #
-COMPONENTS=CUSTOM_DESIGN_MODUS
+COMPONENTS=
 
 # Like COMPONENTS, but disable optional code that was enabled by default.
-DISABLE_COMPONENTS=BSP_DESIGN_MODUS
+DISABLE_COMPONENTS=
 
 # By default the build system automatically looks in the Makefile's directory
 # tree for source code and builds it. The SOURCES variable can be used to
@@ -124,15 +126,38 @@ LDFLAGS=
 # Additional / custom libraries to link in to the application.
 LDLIBS=
 
+CUSTOM_DESIGN_MODUS_DIR=./templates
+
 # Path to the linker script to use (if empty, use the default linker script).
-LINKER_SCRIPT=XMC4700x2048.ld
+ifeq ($(TOOLCHAIN), GCC_ARM)
+ifeq ($(TARGET),APP_KIT_XMC_PLT2GO_XMC4200)
+LINKER_SCRIPT=$(CUSTOM_DESIGN_MODUS_DIR)/TARGET_KIT_XMC_PLT2GO_XMC4200/config/custom_XMC4200x256.ld
+endif
+ifeq ($(TARGET),APP_KIT_XMC43_RELAX_ECAT_V1)
+LINKER_SCRIPT=$(CUSTOM_DESIGN_MODUS_DIR)/TARGET_KIT_XMC43_RELAX_ECAT_V1/config/custom_XMC4300x256.ld
+endif
+ifeq ($(TARGET),APP_KIT_XMC_PLT2GO_XMC4400)
+LINKER_SCRIPT=$(CUSTOM_DESIGN_MODUS_DIR)/TARGET_KIT_XMC_PLT2GO_XMC4400/config/custom_XMC4400x512.ld
+endif
+ifeq ($(TARGET),APP_KIT_XMC45_RELAX_V1)
+LINKER_SCRIPT=$(CUSTOM_DESIGN_MODUS_DIR)/TARGET_KIT_XMC45_RELAX_V1/config/custom_XMC4500x1024.ld
+endif
+ifeq ($(TARGET),APP_KIT_XMC47_RELAX_V1)
+LINKER_SCRIPT=$(CUSTOM_DESIGN_MODUS_DIR)/TARGET_KIT_XMC47_RELAX_V1/config/custom_XMC4700x2048.ld
+endif
+ifeq ($(TARGET),APP_KIT_XMC48_RELAX_ECAT_V1)
+LINKER_SCRIPT=$(CUSTOM_DESIGN_MODUS_DIR)/TARGET_KIT_XMC48_RELAX_ECAT_V1/config/custom_XMC4800x2048.ld
+endif
+else
+$(error Only GCC_ARM toolchain is supported by this code example. Set \
+ Makefile variable TOOLCHAIN to GCC_ARM and build again)
+endif
 
 # Custom pre-build commands to run.
 PREBUILD=
 
 # Custom post-build commands to run.
 POSTBUILD=
-
 
 ################################################################################
 # Paths
