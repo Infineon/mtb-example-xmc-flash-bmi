@@ -14,8 +14,6 @@ This example demonstrates how boot mode index (BMI) can be used to configure a c
 ## Supported toolchains (make variable 'TOOLCHAIN')
 
 - GNU Arm® embedded compiler v10.3.1 (`GCC_ARM`) - Default value of `TOOLCHAIN`
-- Arm&reg; compiler v6.16 (`ARM`)
-- IAR C/C++ compiler v9.30.1 (`IAR`)
 
 ## Supported kits (make variable 'TARGET')
 
@@ -292,6 +290,7 @@ Document title: *CE232718* - *XMC&trade; MCU: Flash BMI*
 | 1.0.0   | New code example      |
 | 1.1.0   | Added support for new kits |
 | 2.0.0   | Updated to support ModusToolbox&trade; software v3.0. <br> This CE is not backward-compatible with previous versions of ModusToolbox™ software |
+| 2.0.1   | Updated README        |
 ------
 
 All other trademarks or registered trademarks referenced herein are the property of their respective owners.
