@@ -7,7 +7,7 @@
 #
 ################################################################################
 # \copyright
-# Copyright 2018-2021, Cypress Semiconductor Corporation (an Infineon company)
+# Copyright 2018-2024, Cypress Semiconductor Corporation (an Infineon company)
 # SPDX-License-Identifier: Apache-2.0
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -121,37 +121,10 @@ CXXFLAGS=
 ASFLAGS=
 
 # Additional / custom linker flags.
-LDFLAGS=
+LDFLAGS=--specs=nosys.specs
 
 # Additional / custom libraries to link in to the application.
 LDLIBS=
-
-CUSTOM_DESIGN_MODUS_DIR=./templates
-
-# Path to the linker script to use (if empty, use the default linker script).
-ifeq ($(TOOLCHAIN), GCC_ARM)
-ifeq ($(TARGET),APP_KIT_XMC_PLT2GO_XMC4200)
-LINKER_SCRIPT=$(CUSTOM_DESIGN_MODUS_DIR)/TARGET_KIT_XMC_PLT2GO_XMC4200/config/custom_XMC4200x256.ld
-endif
-ifeq ($(TARGET),APP_KIT_XMC43_RELAX_ECAT_V1)
-LINKER_SCRIPT=$(CUSTOM_DESIGN_MODUS_DIR)/TARGET_KIT_XMC43_RELAX_ECAT_V1/config/custom_XMC4300x256.ld
-endif
-ifeq ($(TARGET),APP_KIT_XMC_PLT2GO_XMC4400)
-LINKER_SCRIPT=$(CUSTOM_DESIGN_MODUS_DIR)/TARGET_KIT_XMC_PLT2GO_XMC4400/config/custom_XMC4400x512.ld
-endif
-ifeq ($(TARGET),APP_KIT_XMC45_RELAX_V1)
-LINKER_SCRIPT=$(CUSTOM_DESIGN_MODUS_DIR)/TARGET_KIT_XMC45_RELAX_V1/config/custom_XMC4500x1024.ld
-endif
-ifeq ($(TARGET),APP_KIT_XMC47_RELAX_V1)
-LINKER_SCRIPT=$(CUSTOM_DESIGN_MODUS_DIR)/TARGET_KIT_XMC47_RELAX_V1/config/custom_XMC4700x2048.ld
-endif
-ifeq ($(TARGET),APP_KIT_XMC48_RELAX_ECAT_V1)
-LINKER_SCRIPT=$(CUSTOM_DESIGN_MODUS_DIR)/TARGET_KIT_XMC48_RELAX_ECAT_V1/config/custom_XMC4800x2048.ld
-endif
-else
-$(error Only GCC_ARM toolchain is supported by this code example. Set \
- Makefile variable TOOLCHAIN to GCC_ARM and build again)
-endif
 
 # Custom pre-build commands to run.
 PREBUILD=

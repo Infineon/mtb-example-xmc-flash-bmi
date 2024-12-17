@@ -9,7 +9,7 @@
  *
  ******************************************************************************
  *
- * Copyright (c) 2021, Infineon Technologies AG
+ * Copyright (c) 2021-2024, Infineon Technologies AG
  * All rights reserved.
  *
  * Boost Software License - Version 1.0 - August 17th, 2003
@@ -40,11 +40,13 @@
 
 /* Include header files */
 #include <stdio.h>
-#include <stdlib.h>
+
 #include "cybsp.h"
 #include "cy_utils.h"
-#include "retarget_io.h"
+
+#include "cy_retarget_io.h"
 #include "shell.h"
+#include "ring_buffer.h"
 #include <xmc_common.h>
 #include <xmc_scu.h>
 #include <xmc_flash.h>
@@ -52,6 +54,11 @@
 /*******************************************************************************
  * Macros
 ********************************************************************************/
+#define SERIAL_BUFFER_SIZE 128
+
+/* Defines priority level of the DEBUG_UART receive event interrupt */
+#define DEBUG_UART_RECEIVE_EVENT_PRIORITY 63
+
 /* Maximum number of times the UCBs can be programmed */
 #define UCB_PROGRAM_MAX_LIMIT        (4)
 
@@ -145,6 +152,33 @@ uint8_t ucb_program_count = 0;
 
 /* BMI String array */
 uint8_t g_bmi_string[BMI_STRING_LEN] __attribute__((section(".no_init")));
+
+/* Create a buffer with specified size to implement a ring buffer for data received/sent by UART */
+RING_BUFFER_DEF(serial_buffer, SERIAL_BUFFER_SIZE);
+
+/*******************************************************************************
+* Function Name: CYBSP_DEBUG_UART_RECEIVE_EVENT_HANDLER
+********************************************************************************
+* Summary:
+* Interrupt triggered for every received character on UART
+*
+* Parameters:
+*  void
+*
+* Return:
+*  void
+*
+*******************************************************************************/
+void CYBSP_DEBUG_UART_RECEIVE_EVENT_HANDLER(void)
+{
+    static uint8_t data;
+
+    /* Receive single characters from UART and push into ringbuffer */
+    data = XMC_UART_CH_GetReceivedData(CYBSP_DEBUG_UART_HW);
+    ring_buffer_put(&serial_buffer, data);
+
+
+}
 
 /*******************************************************************************
  * Function Name: initialize_shell
@@ -491,7 +525,12 @@ int main(void)
     }
 
     /* Initialize retarget-io to use the debug UART port */
-    retarget_io_init();
+    cy_retarget_io_init(CYBSP_DEBUG_UART_HW);
+    serial_buffer.head = 0;
+    serial_buffer.tail = 0;
+
+    /* Enable IRQ */
+    NVIC_EnableIRQ(CYBSP_DEBUG_UART_RECEIVE_EVENT_IRQN);
 
     /* \x1b[2J\x1b[;H - ANSI ESC sequence for clear screen */
     printf("\x1b[2J\x1b[;H");
